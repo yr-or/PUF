@@ -1,21 +1,24 @@
+
 module ArbiterPuf_top(
-    input clk
-);
+        input clk
+    );
+
+    // Functionality: Instantiate 20 PUFs and cycle through different challenges.
+    // All share same input and challenge.
+
+    localparam APUF_SIZE = 256;
+    localparam NUM_PUFS = 256;
 
     // Create internal wires to connect ILA and VIO
-    wire            signal;
-    wire [127:0]    chal;
-    wire            resp;
-    wire            out_top;
-    wire            out_bot;
-    wire            reset;
+    wire                    signal;
+    wire [APUF_SIZE-1:0]    chal;
+    wire [NUM_PUFS-1:0]     resp;
 
     // VIO
     vio_0 vio(
-        .clk        (clk),
-        .probe_out0 (signal),
-        .probe_out1 (chal),
-        .probe_out2 (reset)
+        .clk                (clk),
+        .probe_out0         (signal),
+        .probe_out1         (chal)
     );
 
     // ILA
@@ -23,19 +26,19 @@ module ArbiterPuf_top(
         .clk        (clk),
         .probe0     (signal),
         .probe1     (chal),
-        .probe2     (resp),
-        .probe3     (out_top),
-        .probe4     (out_bot)
+        .probe2     (resp)
     );
 
-    // Arbiter PUF
-    ArbiterPuf #(.N(128)) APUF(
-        .signal     (signal),
-        .challenge  (chal),
-        .reset      (reset),
-        .Q          (resp),
-        .out_t      (out_top),
-        .out_b      (out_bot)
-    );
+    // Instantiate 256 PUFs
+    genvar i;
+    generate
+        for (i=0; i<NUM_PUFS; i=i+1) begin
+            ArbiterPuf #(.N(APUF_SIZE)) APUF(
+                .signal     (signal),
+                .challenge  (chal),
+                .result     (resp[i])
+            );
+        end
+    endgenerate
 
 endmodule

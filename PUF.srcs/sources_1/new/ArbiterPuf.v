@@ -1,11 +1,11 @@
 
 module ArbiterPuf #(parameter N=8)(
-    input signal, 
-    input [N-1:0] challenge, 
-    input reset, 
-    output Q, 
-    output out_t, out_b 
-); 
+        input signal, 
+        input [N-1:0] challenge,
+        output result,
+        output out_t,
+        output out_b
+    ); 
  
     // Split input signal 
     wire sig_t, sig_b; 
@@ -15,7 +15,7 @@ module ArbiterPuf #(parameter N=8)(
     // Need N internal wires 
     wire [N-1:0] mux_out_t; 
     wire [N-1:0] mux_out_b; 
-    reg Q_reg = 0; 
+    reg out_ff = 0;
  
     // Instantiate first Mux pair 
     Mux2 mu0( 
@@ -40,15 +40,12 @@ module ArbiterPuf #(parameter N=8)(
         end 
     endgenerate 
      
-    // Assign output of last mux pair to flip-flop 
-    always @(posedge mux_out_b[N-1], posedge reset) begin 
-        if (reset) 
-            Q_reg <= 1'b0; 
-        else if (mux_out_b[N-1]) 
-            Q_reg <= mux_out_t[N-1]; 
+    // Assign output of last mux pair to flip-flop
+    always @(posedge mux_out_b[N-1]) begin 
+        out_ff <= mux_out_t[N-1]; 
     end 
  
-    assign Q = Q_reg; 
+    assign result = out_ff; 
     assign out_t = mux_out_t[N-1]; 
     assign out_b = mux_out_b[N-1]; 
  
