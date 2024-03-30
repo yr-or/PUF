@@ -1,10 +1,8 @@
-
+(* keep_hierarchy = "yes" *)
 module ArbiterPuf #(parameter N=8)(
         input signal, 
         input [N-1:0] challenge,
-        output result,
-        output out_t,
-        output out_b
+        output result
     ); 
  
     // Split input signal 
@@ -41,8 +39,8 @@ module ArbiterPuf #(parameter N=8)(
     endgenerate 
      
     // Assign output of last mux pair to flip-flop
-    always @(posedge mux_out_b[N-1]) begin 
-        out_ff <= mux_out_t[N-1]; 
+    always @(posedge mux_out_b[N-1]) begin
+        out_ff <= mux_out_t[N-1];
     end 
  
     assign result = out_ff; 
