@@ -1,5 +1,7 @@
 // Single 2-input multiplexer
 (* keep_hierarchy = "yes" *)
+(* DONT_TOUCH = "yes" *)
+(* keep = "true" *)
 module Mux(
     input a,
     input b,

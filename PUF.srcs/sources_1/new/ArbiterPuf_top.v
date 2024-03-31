@@ -1,4 +1,6 @@
 (* keep_hierarchy = "yes" *)
+(* DONT_TOUCH = "yes" *)
+(* keep = "true" *)
 module ArbiterPuf_top(
         input clk
     );
@@ -6,8 +8,8 @@ module ArbiterPuf_top(
     // Functionality: Instantiate 20 PUFs and cycle through different challenges.
     // All share same input and challenge.
 
-    localparam APUF_SIZE = 10;
-    localparam NUM_PUFS = 2;
+    localparam APUF_SIZE = 32;
+    localparam NUM_PUFS = 256;
 
     // Create internal wires to connect ILA and VIO
     wire                    signal;

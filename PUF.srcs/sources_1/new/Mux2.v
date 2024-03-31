@@ -1,5 +1,7 @@
 // MUX pair for arbiter PUF
 (* keep_hierarchy = "yes" *)
+(* DONT_TOUCH = "yes" *)
+(* keep = "true" *)
 module Mux2
 (
     input in_t, in_b,

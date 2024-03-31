@@ -1,4 +1,6 @@
 (* keep_hierarchy = "yes" *)
+(* DONT_TOUCH = "yes" *)
+(* keep = "true" *)
 module ArbiterPuf #(parameter N=8)(
         input signal, 
         input [N-1:0] challenge,
