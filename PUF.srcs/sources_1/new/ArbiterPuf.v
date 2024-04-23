@@ -8,17 +8,18 @@ module ArbiterPuf #(parameter N=8)(
     ); 
  
     // Split input signal 
-    wire sig_t, sig_b; 
+    wire sig_t;
+    wire sig_b; 
     assign sig_t = signal; 
     assign sig_b = signal; 
      
     // Need N internal wires 
-    wire [N-1:0] mux_out_t; 
-    wire [N-1:0] mux_out_b; 
+    (* MARK_DEBUG = "TRUE" *) wire [N-1:0] mux_out_t; 
+    (* MARK_DEBUG = "TRUE" *) wire [N-1:0] mux_out_b; 
     reg out_ff = 0;
  
     // Instantiate first Mux pair 
-    Mux2 mu0( 
+    Mux2_lut mu0( 
         .in_t       (sig_t), 
         .in_b       (sig_b), 
         .chal_bit   (challenge[0]), 
@@ -30,7 +31,7 @@ module ArbiterPuf #(parameter N=8)(
     genvar i; 
     generate 
         for (i=1; i<N; i=i+1) begin 
-            Mux2 muN( 
+            Mux2_lut muN( 
                 .in_t       (mux_out_t[i-1]), 
                 .in_b       (mux_out_b[i-1]), 
                 .chal_bit   (challenge[i]), 
